@@ -1,6 +1,9 @@
 
 $(function(){
 
+  // checkout table
+  var cotable = $('#co_table');
+
   // Button Animation
   $("#buttons .btn-block").click(function(e){
     e.preventDefault();
@@ -27,6 +30,7 @@ $(function(){
         var result = jQuery.parseJSON(res);
         if(result.error == false){
             alert(result.msg);
+            cotable.find('tbody').append(result.row);
         } else {
             alert(result.msg);
         }
@@ -50,6 +54,12 @@ $(function(){
         var result = jQuery.parseJSON(res);
         if(result.error == false){
             alert(result.msg);
+
+            // Removes from table and hides the book
+            if(result.bid != undefined){
+              $(this).find('input[name="book"]').find('option[value="'+result.bid+'"]').hide();
+              cotable.find('tr#'+result.bid).hide();
+            }
         } else {
             alert(result.msg);
         }

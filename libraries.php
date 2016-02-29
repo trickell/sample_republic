@@ -88,6 +88,16 @@ class Book {
           $q = $db->prepare("UPDATE book SET ScholarID=$sid, Avail=0, CheckoutTime=CURRENT_TIMESTAMP where BookID=".$bid);
           $q->execute();
           $msg = "Book was successfully checked out by you";
+
+          // Build row for html table
+          $query = $db->query('Select * from book
+            inner join homeroom as hr on book.HRID = hr.HRID
+            left join scholar on book.ScholarID = scholar.ScholarID
+            where book.BookID = '.$bid.'
+            limit 1');
+          $b = $query->fetch(PDO::FETCH_OBJ);
+          $html = "<tr id=''".$b->BookID."'><td>".$b->Name."</td><td>".$b->BookName."</td><td>".$b->HRName."</td><td>"
+                  .date("m/d/Y g:ia", strtotime($b->CheckoutTime))."</td></tr>";
         } catch(PDOException $e){
           $msg =  $e->getMessage();
         }
@@ -98,7 +108,9 @@ class Book {
 
       echo json_encode([
         'error' => isset($error) ? $error : false,
-        'msg' => isset($msg) ? $msg : ''
+        'msg' => isset($msg) ? $msg : '',
+        'bid' => $bid,
+        'row' => $html
       ]);
       die();
     }
@@ -133,7 +145,8 @@ class Book {
 
       echo json_encode([
         'error' => isset($error) ? $error : false,
-        'msg' => isset($msg) ? $msg : ''
+        'msg' => isset($msg) ? $msg : '',
+        'bid' => $bid
       ]);
       die();
     }

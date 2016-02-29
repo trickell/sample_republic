@@ -15,6 +15,7 @@ else {
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Republic Library Checkout App</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- Optional theme -->
@@ -46,7 +47,7 @@ else {
           </div>
           <div id="contentForm" class="col-sm-7">
             <div id="checkedout" class="boxPanel" style="display:none;">
-              <table>
+              <table id="co_table" class='table table-striped'>
                 <thead>
                   <tr>
                     <th>Scholar Name</th>
@@ -60,7 +61,7 @@ else {
                   foreach($book->fullList as $hr => $row){
                     foreach($row as $r):
                       if($r['Avail'] == FALSE){
-                        echo "<tr>";
+                        echo "<tr id='".$r['BookID']."'>";
                         echo "<td>".$r['Scholar']."</td>";
                         echo "<td>".$r['BookName']."</td>";
                         echo "<td>".$hr."</td>";
@@ -92,7 +93,7 @@ else {
                     echo "<optgroup label='$k'>";
                     foreach($row as $r):
                       if($r['Avail'] == TRUE) echo "<option value='".$r['BookID']."'>".$r['BookName']."</option>";
-                      else echo "<option value='".$r['BookID']."' disabled>".$r['BookName']."</option>";
+                      // else echo "<option value='".$r['BookID']."' disabled>".$r['BookName']."</option>";
                     endforeach;
                     echo "</optgroup>";
                   }
